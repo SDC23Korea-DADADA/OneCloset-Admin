@@ -1,0 +1,137 @@
+.sub_wrap {
+  padding: 20px;
+  height: 94vh;
+  background-color: #1b1a1a;
+}
+
+.sub_wrap .sub_con{
+  color: white;
+  box-shadow: 0 20px 20px rgba(0,0,0,0.4);
+  max-width: 1600px; max-height: 100%; overflow: hidden; overflow-y: auto; border-radius: 20px; background-repeat: no-repeat; background-size: cover; background-position: center center;
+  background-image: url("https://fitsta-bucket.s3.ap-northeast-2.amazonaws.com/rm218-bb-07.jpg")
+}
+.sub_wrap .sub_contents{padding: 30px 40px; display: flex;}
+
+body {
+  background-color: #1b1a1a;
+}
+
+.sub_con::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sub_con::-webkit-scrollbar-thumb {
+  background-color: #2f3542;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+.sub_con::-webkit-scrollbar-track {
+  background-color: grey;
+  border-radius: 10px; box-shadow:
+  inset 0px 0px 5px white;
+}
+
+table {
+  width: 1000px;
+  text-align: center;
+  border: 1px solid #fff;
+  border-spacing: 1px;
+  font-family: 'Cairo', sans-serif;
+  margin: auto;
+}
+
+table td {
+  padding: 10px;
+  background-color: white;
+}
+
+table th {
+    background-color: #333;
+    padding: 10px;
+}
+
+.tableText{
+  font-weight: bolder;
+  color: #1b1a1a;
+}
+
+.clothes{
+  width: 350px;
+}
+
+.select {
+  float: right;
+  margin-right: 33.8vh;
+}
+
+.selectBox {
+  position: relative;
+  width: 150px;
+  height: 35px;
+  border-radius: 4px;
+  font-weight: bolder;
+  border: 2px solid rgb(16, 16, 17);
+  background-color: rgb(214, 222, 245);
+}
+.selectBox .select {
+  width: inherit;
+  height: inherit;
+  background: transparent;
+  border: 0 none;
+  outline: 0 none;
+  padding: 0 5px;
+  position: relative;
+  z-index: 3;
+}
+.selectBox .selectOption {
+  background: lightcoral;
+  color: #fff;
+  padding: 3px 0;
+  font-size: 16px;
+}
+.selectBox .icoArrow {
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  z-index: 1; 
+  width: 35px; 
+  height: inherit;
+  border-left: 2px solid lightcoral;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectBox .icoArrow img {
+  width: 50%;
+  transition: .3s; 
+}
+
+.selectBox .select:focus + .icoArrow img {
+  transform: rotate(180deg);
+}
+
+.check{
+  margin-top: 52px;
+}
+
+.ignore {
+  margin-top: 20px;
+  /* background-color: transparent; */
+  border-radius: 4px;
+  border: 1px solid #0e0e0e;
+  display: inline-block;
+  cursor: pointer;
+  /* color: #ccaf08; */
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px;
+  text-decoration: none;
+  /* text-shadow: 0px 1px 0px #2f6627; */
+}
+.ignore:hover{
+  color :black;
+  background-color: #e44a5f;
+}

@@ -2,7 +2,7 @@ import style from "../style/AppNotFound.module.css"
 import { useNavigate } from "react-router-dom";
 
 
-function AppNotFound() {
+const AppNotFound = () => {
 
   const navigate = useNavigate();
 
