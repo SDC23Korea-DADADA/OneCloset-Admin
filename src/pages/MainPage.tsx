@@ -4,23 +4,12 @@ import { useRecoilValue } from 'recoil';
 import { adminState } from '../atom/AdminAtom';
 import { ClothesType } from '../type/clothesType';
 import style from '../style/MainPage.module.css';
-
+import { useNavigate } from "react-router-dom";
+import { colorList, materialList, typeList } from '../data/clothesData';
 
 const MainPage = () => {
 
-  const colorList = ["블랙", "네이비", "블루", "그린", "퍼플", "스카이블루",
-    "그레이", "카키", "민트", "브라운", "와인", "베이지", "라벤더", "레드",
-    "오렌지", "핑크", "옐로우", "화이트", "다채색"];
-
-  const materialList = ["면", "니트", "데님",
-  "시폰", "패딩", "트위드",
-  "플리스", "가죽", "코듀로이"];
-
-  const typeList = ["긴팔티", "반팔티", "셔츠/블라우스", 
-    "니트웨어", "후드티", "민소매", "긴바지", "반바지",
-    "롱스커트", "미니스커트", "코트", "재킷", "점퍼/짚업",
-    "패딩", "가디건", "베스트", "원피스", "점프수트"
-  ];
+  const navigate = useNavigate();
 
   const user = useRecoilValue(adminState);
   
@@ -29,6 +18,8 @@ const MainPage = () => {
   const [colorState, setColorState] = useState<string>("");
   const [materialState, setMaterialState] = useState<string>("");
   const [typeState, setTypeState] = useState<string>("");
+  const [training, setTrainging] = useState<number>(0);
+  const [lender, setLender] = useState<boolean>(true);
 
   useEffect(() => {
     getClothesList();
@@ -36,21 +27,25 @@ const MainPage = () => {
 
   useEffect(() => {
     filteringClothes();
-  }, [colorState, materialState, typeState])
+  }, [colorState, materialState, typeState, lender, training])
   
-  const handleColor = async(e:any) => {
+  const handleColor = async(e:React.ChangeEvent<HTMLSelectElement>) => {
     setColorState(e.target.value);
   };
     
-  const handleType = async(e:any) => {
+  const handleType = async(e:React.ChangeEvent<HTMLSelectElement>) => {
     setTypeState(e.target.value);
   };
 
-  const handleMaterial = async(e:any) => {
+  const handleMaterial = async(e:React.ChangeEvent<HTMLSelectElement>) => {
     setMaterialState(e.target.value);
   };
 
-  const filteringClothes = () => {
+  const handleTraining = async(e:React.ChangeEvent<HTMLSelectElement>) => {
+    setTrainging(Number(e.target.value));
+  }
+
+  const filteringClothes = async() => {
     const tempClothesList:ClothesType[] = [];
     originClothesList.map((value) => {
       let check = true;
@@ -60,14 +55,20 @@ const MainPage = () => {
         check = false;
       if (!value.material.includes(materialState))
         check = false;
-      if (check) {
-        tempClothesList.push(value)
+      if (training == 1) {
+        if (!value.training)
+          check = false 
+      } else if (training == 2) {
+        if (value.training)
+          check = false;
       }
+      if (check)
+        tempClothesList.push(value)
     })
     setClothesList([...tempClothesList]);
   }
 
-  async function getClothesList() {
+  const getClothesList = async() => {
     const url = import.meta.env.VITE_SERVER + "/api/admin/clothes";
     const config = { headers: {'Authorization': "Bearer " + user.accessToken} }
     await axios.get(url, config)
@@ -76,9 +77,25 @@ const MainPage = () => {
       setClothesList(data);
       setOriginClothesList(data);
     })
-    .catch((err) => {
-      console.log(err)
+    .catch(() => {
+      alert("관리자 계정이 아닙니다.")
+      navigate("/")
     })
+  }
+
+  const switchTraining = async(clothesId:number) => {
+    if (window.confirm("학습 여부를 변경하시겠습니까?")) {
+      const url = import.meta.env.VITE_SERVER + "/api/admin/clothes/" + clothesId;
+      const config = { headers: {'Authorization': "Bearer " + user.accessToken} }
+      await axios.post(url, null, config)
+      .catch(() => {
+        return
+      })
+      await getClothesList();
+      setLender(!lender);
+    } else {
+      return
+    }
   }
 
   return(
@@ -117,6 +134,11 @@ const MainPage = () => {
               })
             }
           </select>
+          <select onChange={handleTraining} className={style.selectBox} name="languages" id="lang">
+            <option value={0}>추가학습 여부</option>
+            <option value={1}>추가학습 O</option>
+            <option value={2}>추가학습 X</option>
+          </select> 
         </div>
         <table>
           <thead>
@@ -140,9 +162,24 @@ const MainPage = () => {
                     <td>{value.type}</td>
                     <td>{value.material}</td>
                     <td>
-                    <input className={style.check} type="checkbox" id="scales" name="scales"/>
-                    <br></br>
-                    <button className={style.ignore}>삭제</button>
+                      {
+                        value.training?
+                        <>
+                          🟢
+                          <br></br>
+                          <button onClick={() => {
+                            switchTraining(value.clothesId);
+                          }} className={style.ignore}>학습 해제</button>
+                        </>
+                        :
+                        <>
+                          ❌
+                          <br></br>
+                          <button onClick={() => {
+                            switchTraining(value.clothesId);
+                          }} className={style.regist}>학습 등록</button>
+                        </>
+                      }                    
                     </td>
                   </tr>
                 )

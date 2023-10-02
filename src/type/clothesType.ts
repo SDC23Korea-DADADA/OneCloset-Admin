@@ -6,5 +6,6 @@ export type ClothesType = {
   material: string;
   color: string;
   colorCode: string;
+  training: boolean;
 
 }

@@ -4,8 +4,7 @@ import { adminState } from '../atom/AdminAtom';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { userType } from '../type/cserType';
-
+import { userType } from '../type/userType';
 
 const GetAuthCodeAndSendToSpring = () => {
 
